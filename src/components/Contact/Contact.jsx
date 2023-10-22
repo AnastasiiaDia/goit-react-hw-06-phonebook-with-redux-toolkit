@@ -1,7 +1,13 @@
 import { Button } from 'components/Form/FormElements.styled';
 import { Li } from './Contact.styled';
+import { useDispatch } from 'react-redux';
+import { deleteContact } from 'redux/reducer';
 
-const Contact = ({ name, id, number, onDeleteContact }) => {
+const Contact = ({ name, id, number }) => {
+  const distatch = useDispatch();
+  const onDeleteContact = id => {
+    distatch(deleteContact(id));
+  };
   return (
     <Li>
       <span>{name}</span>

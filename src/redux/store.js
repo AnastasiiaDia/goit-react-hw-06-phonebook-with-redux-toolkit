@@ -1,7 +1,36 @@
-import { devToolsEnhancer } from '@redux-devtools/extension';
-import { createStore } from 'redux';
-import { rootReducer } from './reducer';
+import { configureStore } from '@reduxjs/toolkit';
+import { contactReducer } from './reducer';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
 
-const enhancer = devToolsEnhancer();
+// Saving to localeStorage by using redux-persist
+const persistConfig = {
+  key: 'contacts',
+  storage,
+  whitelist: ['contacts'],
+};
 
-export const store = createStore(rootReducer, enhancer);
+const persistedReducer = persistReducer(persistConfig, contactReducer);
+
+export const store = configureStore({
+  reducer: {
+    contacts: persistedReducer,
+  },
+  middleware: getDefaultMiddleware =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
+});
+
+export const persistor = persistStore(store);

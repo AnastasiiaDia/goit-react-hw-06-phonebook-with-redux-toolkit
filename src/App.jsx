@@ -3,18 +3,14 @@ import { ContactList } from './components/ContactList/ContactList';
 import { Container } from './components/Container.styled';
 import { Input, Section } from './components/Form/FormElements.styled';
 import { useDispatch, useSelector } from 'react-redux';
-// import { getRegisteredStyles } from '@emotion/css';
+
 import { getContacts, getFilter } from 'redux/selector';
-import { deleteContact, setFilter } from 'redux/actions';
+import { setFilter } from 'redux/reducer';
 
 export function App() {
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
   const filter = useSelector(getFilter);
-
-  const onDeleteContact = id => {
-    dispatch(deleteContact(id));
-  };
 
   const onChangeImputFilter = event => {
     dispatch(setFilter(event.target.value.trim()));
@@ -37,11 +33,8 @@ export function App() {
             placeholder="Search contact"
             value={filter}
             onChange={onChangeImputFilter}
-          ></Input>
-          <ContactList
-            contacts={filteredContacts}
-            onDeleteContact={onDeleteContact}
           />
+          <ContactList contacts={filteredContacts} />
         </Section>
       )}
     </Container>
